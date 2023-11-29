@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
+juce_add_modules()
+
 juce_add_plugin(SimpleEQ
     VERSION 1.0                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
@@ -64,3 +66,16 @@ target_link_libraries(SimpleEQ
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
+
+# Set Post-Build step to copy plugin library to Reaper's VST folder
+# function(copy_vst_to_target_dir target)
+#     add_custom_command(
+#         TARGET ${target} POST_BUILD
+#         COMMAND ${CMAKE_COMMAND} -E copy_directory
+#             "${CMAKE_CURRENT_SOURCE_DIR}/vst"
+#     )
+# endfunction()
+
+# set_target_properties(SimpleEQ PROPERTIES
+#     RUNTIME_OUTPUT_DIRECTORY ./vst
+# )

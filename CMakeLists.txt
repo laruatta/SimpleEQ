@@ -15,11 +15,12 @@ CPMAddPackage(
 
 add_subdirectory(src)
 
-# include(InstallRequiredSystemLibraries)
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
-# set(CPACK_PACKAGE_VERSION_MAJOR "${_VERSION_MAJOR}")
-# set(CPACK_PACKAGE_VERSION_MINOR "${_VERSION_MINOR}")
-# include(CPack)
+# CPack builds an installer around the final executable
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR "${_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${_VERSION_MINOR}")
+include(CPack)
 
 if(MSVC)
     add_compile_options(/Wall /WX)
