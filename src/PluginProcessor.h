@@ -3,6 +3,15 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 
+struct ChainSettings
+{
+    float peakFreq { 0 }, peakGainInDecibels{ 0 }, peakQuality { 1.f };
+    float lowCutFreq { 0 }, highCutFreq { 0 };
+    int lowCutSlope { 0 }, highCutSlope { 0 };
+};
+
+ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
+
 //==============================================================================
 class SimpleEQAudioProcessor final : public juce::AudioProcessor
 {
