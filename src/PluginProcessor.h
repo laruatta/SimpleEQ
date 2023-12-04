@@ -82,6 +82,51 @@ private:
 
     using Coefficients = Filter::CoefficientsPtr;
     static void updateCoefficients(Coefficients& old, const Coefficients& replacements);
+    
+    template<typename ChainType, typename CoefficientType>
+    void updateCutFilter(ChainType& cutFilterChain,
+                         const CoefficientType& cutCoefficients,
+                         const Slope& lowCutSlope)
+    {
+        cutFilterChain.template setBypassed<0>(true);
+        cutFilterChain.template setBypassed<1>(true);
+        cutFilterChain.template setBypassed<2>(true);
+        cutFilterChain.template setBypassed<3>(true);
+
+        switch( lowCutSlope )
+        {
+            case Slope_12:
+            *cutFilterChain.template get<0>().coefficients = *cutCoefficients[0];
+            cutFilterChain.template setBypassed<0>(false);
+            break;
+            case Slope_24:
+            *cutFilterChain.template get<0>().coefficients = *cutCoefficients[0];
+            cutFilterChain.template setBypassed<0>(false);
+            *cutFilterChain.template get<1>().coefficients = *cutCoefficients[1];
+            cutFilterChain.template setBypassed<1>(false);
+            break;
+            case Slope_36:
+            *cutFilterChain.template get<0>().coefficients = *cutCoefficients[0];
+            cutFilterChain.template setBypassed<0>(false);
+            *cutFilterChain.template get<1>().coefficients = *cutCoefficients[1];
+            cutFilterChain.template setBypassed<1>(false);
+            *cutFilterChain.template get<2>().coefficients = *cutCoefficients[2];
+            cutFilterChain.template setBypassed<2>(false);
+            break;
+            case Slope_48:
+            *cutFilterChain.template get<0>().coefficients = *cutCoefficients[0];
+            cutFilterChain.template setBypassed<0>(false);
+            *cutFilterChain.template get<1>().coefficients = *cutCoefficients[1];
+            cutFilterChain.template setBypassed<1>(false);
+            *cutFilterChain.template get<2>().coefficients = *cutCoefficients[2];
+            cutFilterChain.template setBypassed<2>(false);
+            *cutFilterChain.template get<3>().coefficients = *cutCoefficients[3];
+            cutFilterChain.template setBypassed<3>(false);
+            break;
+            default:
+            break;
+        } 
+    }
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleEQAudioProcessor)
 };
