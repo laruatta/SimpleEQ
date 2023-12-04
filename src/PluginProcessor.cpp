@@ -101,14 +101,14 @@ void SimpleEQAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBloc
     auto chainSettings = getChainSettings(apvts);
 
     updatePeakFilter(chainSettings);
-    auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
+    auto lowCutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
                                                                                                        sampleRate,
                                                                                                        2 * (chainSettings.lowCutSlope + 1));
     auto& leftLowCut = leftChain.get<ChainPositions::LowCut>();
-    updateCutFilter(leftLowCut,cutCoefficients,chainSettings.lowCutSlope);
+    updateCutFilter(leftLowCut,lowCutCoefficients,chainSettings.lowCutSlope);
 
     auto& rightLowCut = rightChain.get<ChainPositions::LowCut>();
-    updateCutFilter(rightLowCut,cutCoefficients,chainSettings.lowCutSlope);
+    updateCutFilter(rightLowCut,lowCutCoefficients,chainSettings.lowCutSlope);
 }
 
 void SimpleEQAudioProcessor::releaseResources()
