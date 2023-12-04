@@ -2,12 +2,21 @@
 
 #include "PluginProcessor.h"
 
+struct CustomRotarySlider : juce::Slider
+{
+    CustomRotarySlider() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                                        juce::Slider::TextEntryBoxPosition::NoTextBox)
+                                        {
+
+                                        }
+};
+
 //==============================================================================
-class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
+class SimpleEQAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:
-    explicit AudioPluginAudioProcessorEditor (SimpleEQAudioProcessor&);
-    ~AudioPluginAudioProcessorEditor() override;
+    explicit SimpleEQAudioProcessorEditor (SimpleEQAudioProcessor&);
+    ~SimpleEQAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -18,5 +27,13 @@ private:
     // access the processor object that created it.
     SimpleEQAudioProcessor& processorRef;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
+    CustomRotarySlider peakFreqSlider,
+                        peakGainSlider,
+                        peakQualitySlider,
+                        loCutFreqSlider,
+                        hiCutFreqSlider;
+
+    std::vector<juce::Component*> getComps();
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleEQAudioProcessorEditor)
 };
