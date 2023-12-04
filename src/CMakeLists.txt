@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-# juce_add_modules()
+juce_add_modules()
 
 juce_add_plugin(SimpleEQ
     VERSION 1.0                               # Set this if the plugin version is different to the project version
