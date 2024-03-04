@@ -211,12 +211,12 @@ ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts)
     // can't do this now because apvts expects raw parameter values, not normalized values
     // apvts.getParameter("LowCut Freq")->getValue();
 
-    settings.lowCutFreq = apvts.getRawParameterValue("LowCut Freq")->load();
+    settings.lowCutFreq = apvts.getRawParameterValue("LoCut Freq")->load();
     settings.highCutFreq = apvts.getRawParameterValue("HiCut Freq")->load();
     settings.peakFreq = apvts.getRawParameterValue("Peak Freq")->load();
     settings.peakGainInDecibels = apvts.getRawParameterValue("Peak Gain")->load();
     settings.peakQuality = apvts.getRawParameterValue("Peak Quality")->load();
-    settings.lowCutSlope = static_cast<Slope>(apvts.getRawParameterValue("LowCut Slope")->load());
+    settings.lowCutSlope = static_cast<Slope>(apvts.getRawParameterValue("LoCut Slope")->load());
     settings.highCutSlope = static_cast<Slope>(apvts.getRawParameterValue("HiCut Slope")->load());
     return settings;
 }
@@ -278,8 +278,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>("LowCut Freq",
-                                                           "LowCut Freq",
+    layout.add(std::make_unique<juce::AudioParameterFloat>("LoCut Freq",
+                                                           "LoCut Freq",
                                                            juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f),
                                                            20.f));
 
@@ -312,7 +312,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout
         stringArray.add(str);
     }
 
-    layout.add(std::make_unique<juce::AudioParameterChoice>("LowCut Slope", "LowCut Slope", stringArray, 0));
+    layout.add(std::make_unique<juce::AudioParameterChoice>("LoCut Slope", "LoCut Slope", stringArray, 0));
     layout.add(std::make_unique<juce::AudioParameterChoice>("HiCut Slope", "HiCut Slope", stringArray, 0));
     
     return layout;

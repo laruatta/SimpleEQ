@@ -2,10 +2,17 @@
 #include "PluginEditor.h"
 
 //==============================================================================
+// Constructor of SimpleEQAudioProcessorEditor class;
 SimpleEQAudioProcessorEditor::SimpleEQAudioProcessorEditor (SimpleEQAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+    : AudioProcessorEditor (&p), processorRef (p),
+    peakFreqSliderAttachment(processorRef.apvts, "Peak Freq", peakFreqSlider),
+    peakGainSliderAttachment(processorRef.apvts, "Peak Gain", peakGainSlider),
+    peakQualitySliderAttachment(processorRef.apvts, "Peak Quality", peakQualitySlider),
+    loCutFreqSliderAttachment(processorRef.apvts, "LoCut Freq", loCutFreqSlider),
+    hiCutFreqSliderAttachment(processorRef.apvts, "HiCut Freq", hiCutFreqSlider),
+    loCutSlopeSliderAttachment(processorRef.apvts, "LoCut Slope", loCutSlopeSlider),
+    hiCutSlopeSliderAttachment(processorRef.apvts, "HiCut Slope", hiCutSlopeSlider)
 {
-    juce::ignoreUnused (processorRef);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
 
@@ -42,7 +49,7 @@ void SimpleEQAudioProcessorEditor::resized()
     auto hiCutArea = bounds.removeFromRight(bounds.getWidth() * 0.5);
 
     loCutFreqSlider.setBounds(loCutArea.removeFromTop(loCutArea.getHeight() * 0.5));
-    loCutSlopeSlider.setBounds(loCutArea)
+    loCutSlopeSlider.setBounds(loCutArea);
     hiCutFreqSlider.setBounds(hiCutArea.removeFromTop(hiCutArea.getHeight() * 0.5));
     hiCutSlopeSlider.setBounds(hiCutArea);
 

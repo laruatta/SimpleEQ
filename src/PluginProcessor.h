@@ -103,19 +103,21 @@ private:
         switch( cutSlope )
         {
             case Slope_48:
+            {
                 update<3>(cutFilterChain, cutCoefficients);
-            break;
+            }
             case Slope_36:
+            {
                 update<2>(cutFilterChain, cutCoefficients);
-            break;
+            }
             case Slope_24:
+            {
                 update<1>(cutFilterChain, cutCoefficients);
-            break;
+            }
             case Slope_12:
+            {
                 update<0>(cutFilterChain, cutCoefficients);
-            break;
-            default:
-            break;
+            }
         } 
     }
 
