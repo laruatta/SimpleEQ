@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.28)
 project(SimpleEQ VERSION 1.0)
 set(CMAKE_C_STANDARD 23)
 
+# include(CMakePrintHelpers)
+# cmake_print_variables(CMAKE_BUILD_TYPE)
+
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 include(cmake/CPM.cmake)
 
