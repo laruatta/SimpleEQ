@@ -71,15 +71,14 @@ void updateCutFilter(ChainType& cutFilterChain,
         {
             update<0>(cutFilterChain, cutCoefficients);
         }
-    } 
+    }
 }
 
-inline auto makeLowCutFilter(const ChainSettings& chainSettings, double sampleRate)
+inline auto makeLoCutFilter(const ChainSettings& chainSettings, double sampleRate)
 {
     return juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
                                                                                         sampleRate,
                                                                                         2 * (chainSettings.lowCutSlope + 1));
-    
 }
 
 inline auto makeHiCutFilter(const ChainSettings& chainSettings, double sampleRate)
@@ -137,9 +136,6 @@ private:
     MonoChain leftChain, rightChain;
 
     void updatePeakFilter(const ChainSettings &chainSettings);
-    
-    
-
     void updateLoCutFilters(const ChainSettings& chainSettings);
     void updateHiCutFilters(const ChainSettings& chainSettings);
     void updateFilters();

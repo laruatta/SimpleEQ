@@ -9,6 +9,8 @@ ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : proc
     {
         param->addListener(this);
     }
+
+    startTimerHz(60);
 }
 
 ResponseCurveComponent::~ResponseCurveComponent()
@@ -22,11 +24,15 @@ ResponseCurveComponent::~ResponseCurveComponent()
 
 void ResponseCurveComponent::parameterValueChanged(int parameterIndex, float newValue)
 {
+    juce::ignoreUnused(parameterIndex);
+    juce::ignoreUnused(newValue);
     parametersChanged.set(true);
 }
 
 void ResponseCurveComponent::parameterGestureChanged(int parameterIndex, bool gestureIsStarting)
 {
+    juce::ignoreUnused(parameterIndex);
+    juce::ignoreUnused(gestureIsStarting);
     // parametersChanged.set(true);
 }
 
@@ -39,7 +45,7 @@ void ResponseCurveComponent::timerCallback()
         auto peakCoefficients = makePeakFilter(chainSettings, processorRef.getSampleRate());
         updateCoefficients(monoChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
         
-        auto lowCutCoefficients = makeLowCutFilter(chainSettings, processorRef.getSampleRate());
+        auto lowCutCoefficients = makeLoCutFilter(chainSettings, processorRef.getSampleRate());
         auto hiCutCoefficients  = makeHiCutFilter(chainSettings, processorRef.getSampleRate());
 
         updateCutFilter(monoChain.get<ChainPositions::LowCut>(), lowCutCoefficients, chainSettings.lowCutSlope);
@@ -196,6 +202,7 @@ std::vector<juce::Component*> SimpleEQAudioProcessorEditor::getComps()
         &loCutFreqSlider,
         &hiCutFreqSlider,
         &loCutSlopeSlider,
-        &hiCutSlopeSlider
+        &hiCutSlopeSlider,
+        &responseCurveComponent
     };
 }

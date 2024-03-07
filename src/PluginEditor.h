@@ -19,11 +19,8 @@ juce::Timer
     ~ResponseCurveComponent();
 
     void parameterValueChanged (int parameterIndex, float newValue) override;
-
     void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override;
-
     void timerCallback() override;
-
     void paint (juce::Graphics&) override;
 
     private:
@@ -72,7 +69,6 @@ private:
                 hiCutSlopeSliderAttachment;
 
     std::vector<juce::Component*> getComps();
-
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleEQAudioProcessorEditor)
 };
