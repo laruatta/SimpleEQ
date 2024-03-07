@@ -29,13 +29,6 @@ void ResponseCurveComponent::parameterValueChanged(int parameterIndex, float new
     parametersChanged.set(true);
 }
 
-void ResponseCurveComponent::parameterGestureChanged(int parameterIndex, bool gestureIsStarting)
-{
-    juce::ignoreUnused(parameterIndex);
-    juce::ignoreUnused(gestureIsStarting);
-    // parametersChanged.set(true);
-}
-
 void ResponseCurveComponent::timerCallback()
 {
     if( parametersChanged.compareAndSetBool(false, true))
@@ -136,7 +129,17 @@ void ResponseCurveComponent::paint (juce::Graphics& g)
 // Constructor of SimpleEQAudioProcessorEditor class;
 SimpleEQAudioProcessorEditor::SimpleEQAudioProcessorEditor (SimpleEQAudioProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p),
+
+    peakFreqSlider(*processorRef.apvts.getParameter("Peak Freq"), "Hz"),
+    peakGainSlider(*processorRef.apvts.getParameter("Peak Gain"),"dB"),
+    peakQualitySlider(*processorRef.apvts.getParameter("Peak Quality"),""),
+    loCutFreqSlider(*processorRef.apvts.getParameter("LoCut Freq"),"Hz"),
+    hiCutFreqSlider(*processorRef.apvts.getParameter("HiCut Freq"),"Hz"),
+    loCutSlopeSlider(*processorRef.apvts.getParameter("LoCut Slope"),"dB/Oct"),
+    hiCutSlopeSlider(*processorRef.apvts.getParameter("HiCut Slope"),"dB/Oct"),
+
     responseCurveComponent(processorRef),
+
     peakFreqSliderAttachment(processorRef.apvts, "Peak Freq", peakFreqSlider),
     peakGainSliderAttachment(processorRef.apvts, "Peak Gain", peakGainSlider),
     peakQualitySliderAttachment(processorRef.apvts, "Peak Quality", peakQualitySlider),

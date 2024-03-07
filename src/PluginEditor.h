@@ -2,13 +2,42 @@
 
 #include "PluginProcessor.h"
 
-struct CustomRotarySlider : juce::Slider
+struct LookAndFeel : juce::LookAndFeel_V4
 {
-    CustomRotarySlider() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
-                                        juce::Slider::TextEntryBoxPosition::NoTextBox)
-                                        {
+    void drawRotarySlider (juce::Graphics&, int x, int y, int width, int height,
+                        float sliderPosProportional, 
+                        float rotaryStartAngle,
+                        float rotaryEndAngle, juce::Slider&) override { }
+};
 
-                                        }
+struct LabeledRotarySlider : juce::Slider
+{
+    // constructor
+    LabeledRotarySlider(juce::RangedAudioParameter& rap, const juce::String& unitSuffix) : 
+    juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                 juce::Slider::TextEntryBoxPosition::NoTextBox),
+    param(&rap),
+    suffix(unitSuffix)
+    {
+        setLookAndFeel(&laf);
+    }
+
+    // destructor
+    ~LabeledRotarySlider()
+    {
+        setLookAndFeel(nullptr);
+    }
+
+    void paint(juce::Graphics& g) override {juce::ignoreUnused(g);}
+    juce::Rectangle<int> getSliderBounds() const;
+    int getTextHeight() const{ return 14; }
+    juce::String getDisplayString() const;
+
+    private:
+        LookAndFeel laf;
+        juce::RangedAudioParameter* param;
+        juce::String suffix;
+
 };
 
 struct ResponseCurveComponent: juce::Component,
@@ -19,7 +48,7 @@ juce::Timer
     ~ResponseCurveComponent();
 
     void parameterValueChanged (int parameterIndex, float newValue) override;
-    void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override;
+    void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override {};
     void timerCallback() override;
     void paint (juce::Graphics&) override;
 
@@ -47,7 +76,7 @@ private:
     // access the processor object that created it.
     SimpleEQAudioProcessor& processorRef;
 
-    CustomRotarySlider peakFreqSlider,
+    LabeledRotarySlider peakFreqSlider,
                         peakGainSlider,
                         peakQualitySlider,
                         loCutFreqSlider,
