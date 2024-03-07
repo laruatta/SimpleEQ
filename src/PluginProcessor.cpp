@@ -248,7 +248,7 @@ void updateCoefficients(Coefficients &old, const Coefficients &replacements)
 
 void SimpleEQAudioProcessor::updateLoCutFilters(const ChainSettings& chainSettings)
 {
-    auto cutCoefficients = makeLowCutFilter(chainSettings, getSampleRate());                                                                             2 * (chainSettings.lowCutSlope + 1));
+    auto cutCoefficients = makeLowCutFilter(chainSettings, getSampleRate());
     auto& leftLowCut = leftChain.get<ChainPositions::LowCut>();
     auto& rightLowCut = rightChain.get<ChainPositions::LowCut>();
     
