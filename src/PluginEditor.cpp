@@ -171,6 +171,7 @@ ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : proc
         param->addListener(this);
     }
 
+    updateChain();
     startTimerHz(60);
 }
 
@@ -194,20 +195,24 @@ void ResponseCurveComponent::timerCallback()
 {
     if( parametersChanged.compareAndSetBool(false, true))
     {
-        // update Editor local monochain
-        auto chainSettings = getChainSettings(processorRef.apvts);
-        auto peakCoefficients = makePeakFilter(chainSettings, processorRef.getSampleRate());
-        updateCoefficients(monoChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
-        
-        auto lowCutCoefficients = makeLoCutFilter(chainSettings, processorRef.getSampleRate());
-        auto hiCutCoefficients  = makeHiCutFilter(chainSettings, processorRef.getSampleRate());
-
-        updateCutFilter(monoChain.get<ChainPositions::LowCut>(), lowCutCoefficients, chainSettings.lowCutSlope);
-        updateCutFilter(monoChain.get<ChainPositions::HiCut>(), hiCutCoefficients, chainSettings.highCutSlope);
-        
+        updateChain();
         // signal a repaint
         repaint();
     }
+}
+
+void ResponseCurveComponent::updateChain()
+{
+    // update Editor local monochain
+    auto chainSettings = getChainSettings(processorRef.apvts);
+    auto peakCoefficients = makePeakFilter(chainSettings, processorRef.getSampleRate());
+    updateCoefficients(monoChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
+    
+    auto lowCutCoefficients = makeLoCutFilter(chainSettings, processorRef.getSampleRate());
+    auto hiCutCoefficients  = makeHiCutFilter(chainSettings, processorRef.getSampleRate());
+
+    updateCutFilter(monoChain.get<ChainPositions::LowCut>(), lowCutCoefficients, chainSettings.lowCutSlope);
+    updateCutFilter(monoChain.get<ChainPositions::HiCut>(), hiCutCoefficients, chainSettings.highCutSlope);
 }
 
 void ResponseCurveComponent::paint (juce::Graphics& g)
@@ -341,9 +346,14 @@ void SimpleEQAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     auto bounds = getLocalBounds();
-    auto responseArea = bounds.removeFromTop(bounds.getHeight() * 0.33);
+
+    //JUCE_LIVE_CONSTANT(33)/100.f;
+    float hRatio = 25 / 100.f;
+
+    auto responseArea = bounds.removeFromTop(bounds.getHeight() * hRatio);
 
     responseCurveComponent.setBounds(responseArea);
+    bounds.removeFromTop(10);
 
     auto loCutArea = bounds.removeFromLeft(bounds.getWidth() * 0.33);
     auto hiCutArea = bounds.removeFromRight(bounds.getWidth() * 0.5);

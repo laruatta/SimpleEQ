@@ -68,6 +68,8 @@ juce::Timer
         // Because Listeners MUST be very fast and avoid blocking, we define an atomic flag for signalling
         juce::Atomic<bool> parametersChanged { false };
         MonoChain monoChain;
+
+        void updateChain();
 };
 
 //==============================================================================
