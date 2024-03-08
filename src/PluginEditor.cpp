@@ -99,7 +99,38 @@ juce::Rectangle<int> LabeledRotarySlider::getSliderBounds() const
 
 juce::String LabeledRotarySlider::getDisplayString() const
 {
-    return juce::String(getValue());
+    if( auto* choiseParam = dynamic_cast<juce::AudioParameterChoice*>(param)) 
+        return choiseParam->getCurrentChoiceName();
+
+    juce::String str;
+    bool addK = false;  // units
+
+    if( auto* floatParam = dynamic_cast<juce::AudioParameterFloat*>(param))
+    {
+        float val = getValue();
+
+        if( val > 999.f)
+        {
+            val /= 1000;
+            addK = true;
+        }
+
+        str = juce::String(val, (addK ? 2 : 0));
+    }
+    else
+    {
+        jassertfalse;
+    }
+
+    if( suffix.isNotEmpty())
+    {
+        str << " ";
+        if( addK )
+            str << "k";
+
+        str << suffix;
+    }
+    return str;
 }
 
 //=========================================================================

@@ -309,7 +309,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout
     {
         juce::String str;
         str << (12 + i*12);
-        str << "db/Oct";
+        str << " db/Oct";
         stringArray.add(str);
     }
 
