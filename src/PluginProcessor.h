@@ -76,7 +76,7 @@ void updateCutFilter(ChainType& cutFilterChain,
 
 inline auto makeLoCutFilter(const ChainSettings& chainSettings, double sampleRate)
 {
-    return juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
+    return juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
                                                                                         sampleRate,
                                                                                         2 * (chainSettings.lowCutSlope + 1));
 }
