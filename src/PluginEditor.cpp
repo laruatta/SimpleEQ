@@ -319,6 +319,24 @@ SimpleEQAudioProcessorEditor::SimpleEQAudioProcessorEditor (SimpleEQAudioProcess
     peakFreqSlider.labels.add({0.f, "20Hz"});
     peakFreqSlider.labels.add({1.f, "20kHz"});
 
+    peakGainSlider.labels.add({0.f, "-24dB"});
+    peakGainSlider.labels.add({1.f, "+24dB"});
+    
+    peakQualitySlider.labels.add({0.f, "0.1"});
+    peakQualitySlider.labels.add({1.f, "10.0"});
+    
+    loCutFreqSlider.labels.add({0.f, "20Hz"});
+    loCutFreqSlider.labels.add({1.f, "20kHz"});
+    
+    hiCutFreqSlider.labels.add({0.f, "20Hz"});
+    hiCutFreqSlider.labels.add({1.f, "20kHz"});
+    
+    loCutSlopeSlider.labels.add({0.0f, "12"});
+    loCutSlopeSlider.labels.add({1.f, "48"});
+    
+    hiCutSlopeSlider.labels.add({0.0f, "12"});
+    hiCutSlopeSlider.labels.add({1.f, "48"});
+
     for( auto* comp : getComps( ))
     {
         addAndMakeVisible(comp);
