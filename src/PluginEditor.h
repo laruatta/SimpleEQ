@@ -4,10 +4,12 @@
 
 struct LookAndFeel : juce::LookAndFeel_V4
 {
-    void drawRotarySlider (juce::Graphics&, int x, int y, int width, int height,
+    void drawRotarySlider (juce::Graphics&, 
+                        int x, int y, int width, int height,
                         float sliderPosProportional, 
                         float rotaryStartAngle,
-                        float rotaryEndAngle, juce::Slider&) override { }
+                        float rotaryEndAngle, 
+                        juce::Slider&) override;
 };
 
 struct LabeledRotarySlider : juce::Slider
@@ -28,7 +30,7 @@ struct LabeledRotarySlider : juce::Slider
         setLookAndFeel(nullptr);
     }
 
-    void paint(juce::Graphics& g) override {juce::ignoreUnused(g);}
+    void paint(juce::Graphics& g) override;
     juce::Rectangle<int> getSliderBounds() const;
     int getTextHeight() const{ return 14; }
     juce::String getDisplayString() const;
@@ -48,7 +50,7 @@ juce::Timer
     ~ResponseCurveComponent();
 
     void parameterValueChanged (int parameterIndex, float newValue) override;
-    void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override {};
+    void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override { };
     void timerCallback() override;
     void paint (juce::Graphics&) override;
 
