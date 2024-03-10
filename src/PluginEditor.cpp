@@ -139,7 +139,7 @@ juce::String LabeledRotarySlider::getDisplayString() const
 
         if( val > 999.f)
         {
-            val /= 1000;
+            val /= 1000.f;
             addK = true;
         }
 
@@ -178,7 +178,7 @@ ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : proc
 ResponseCurveComponent::~ResponseCurveComponent()
 {
     const auto& params = processorRef.getParameters();
-    for ( auto& param : params )
+    for ( auto param : params )
     {
         param->removeListener(this);
     }
@@ -224,7 +224,7 @@ void ResponseCurveComponent::paint (juce::Graphics& g)
 
     g.drawImage(background, getLocalBounds().toFloat());
 
-    auto responseArea = getRenderArea();
+    auto responseArea = getAnalysisArea();
     auto w = responseArea.getWidth();
 
     auto& lowcut = monoChain.get<ChainPositions::LowCut>();
@@ -283,7 +283,7 @@ void ResponseCurveComponent::paint (juce::Graphics& g)
     }
 
     g.setColour(Colours::orange);
-    g.drawRoundedRectangle(responseArea.toFloat(),4.f, 1.f);
+    g.drawRoundedRectangle(getRenderArea().toFloat(),4.f, 1.f);
 
     g.setColour(Colours::white);
     g.strokePath(responseCurve, PathStrokeType(2.f));
