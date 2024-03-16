@@ -162,7 +162,9 @@ juce::String LabeledRotarySlider::getDisplayString() const
 }
 
 //=========================================================================
-ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : processorRef(p)
+ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : 
+processorRef(p),
+leftChannelFifo(&processorRef.leftChannelFifo)
 {
     const auto& params = processorRef.getParameters();
 
@@ -170,6 +172,9 @@ ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) : proc
     {
         param->addListener(this);
     }
+
+    leftChannelFFTDataGenerator.changeOrder(FFTOrder::order2048);
+    monoBuffer.setSize(1, leftChannelFFTDataGenerator.getFFTSize());
 
     updateChain();
     startTimerHz(60);
@@ -193,6 +198,48 @@ void ResponseCurveComponent::parameterValueChanged(int parameterIndex, float new
 
 void ResponseCurveComponent::timerCallback()
 {
+    juce::AudioBuffer<float> tempIncomingBuffer;
+
+    while( leftChannelFifo->getNumCompleteBuffersAvailable() > 0)
+    {
+        if( leftChannelFifo->getAudioBuffer(tempIncomingBuffer))
+        {
+            // must make sure the samples are stuffed in the same order they came in
+            // first, shift 
+            auto size = tempIncomingBuffer.getNumSamples();
+
+            juce::FloatVectorOperations::copy(monoBuffer.getWritePointer(0, 0),
+                                              monoBuffer.getReadPointer(0, size),
+                                              monoBuffer.getNumSamples() - size);
+
+            juce::FloatVectorOperations::copy(monoBuffer.getWritePointer(0, monoBuffer.getNumSamples() - size),
+                                             tempIncomingBuffer.getReadPointer(0, 0),
+                                             size);
+
+            leftChannelFFTDataGenerator.produceFFTDataForRendering(monoBuffer, -48);
+        }
+    }
+
+    // if FFT data buffers exist to pull, generate a path after pulling the buffer
+    const auto fftBounds = getAnalysisArea().toFloat();
+    const auto fftSize = leftChannelFFTDataGenerator.getFFTSize();
+    const auto binWidth = processorRef.getSampleRate() / (double)fftSize;
+
+    while( leftChannelFFTDataGenerator.getNumAvailableFFTDataBlocks() > 0)
+    {
+        std::vector<float> fftData;
+        if(leftChannelFFTDataGenerator.getFFTData(fftData) )
+        {
+            pathProducer.generatePath(fftData, fftBounds, fftSize, binWidth, -48.f);
+        }
+    }
+
+    // while paths exist to pull, pull as many as possible.  We'll only display the most recent path
+    while( pathProducer.getNumPathsAvailable() )
+    {
+        pathProducer.getPath(leftChannelFFTPath);
+    }
+
     if( parametersChanged.compareAndSetBool(false, true))
     {
         updateChain();
