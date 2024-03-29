@@ -275,8 +275,8 @@ void SimpleEQAudioProcessor::updateHiCutFilters(const ChainSettings& chainSettin
 void SimpleEQAudioProcessor::updateFilters(void)
 {
     auto chainSettings = getChainSettings(apvts);
-    updatePeakFilter(chainSettings);
     updateLoCutFilters(chainSettings);
+    updatePeakFilter(chainSettings);
     updateHiCutFilters(chainSettings);
 }
 
