@@ -193,6 +193,28 @@ struct LabeledRotarySlider : juce::Slider
 
 };
 
+struct PathProducer
+{
+    PathProducer(SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType> &scsf) :
+    leftChannelFifo(&scsf)
+    {
+        leftChannelFFTDataGenerator.changeOrder(FFTOrder::order2048);
+        monoBuffer.setSize(1, leftChannelFFTDataGenerator.getFFTSize());
+    }
+    void process(juce::Rectangle<float> fftBounds, double sampleRate);
+    juce::Path getPath() { return leftChannelFFTPath; }
+    private:
+    SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType> *leftChannelFifo;
+
+    juce::AudioBuffer<float> monoBuffer;
+
+    FFTDataGenerator<std::vector<float>> leftChannelFFTDataGenerator;
+
+    AnalyzerPathGenerator<juce::Path> pathProducer;
+
+    juce::Path leftChannelFFTPath;
+};
+
 struct ResponseCurveComponent: juce::Component,
 juce::AudioProcessorParameter::Listener,
 juce::Timer
@@ -201,7 +223,7 @@ juce::Timer
     ~ResponseCurveComponent();
 
     void parameterValueChanged (int parameterIndex, float newValue) override;
-    void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override { };
+    void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override { }
     void timerCallback() override;
     void paint (juce::Graphics& g) override;
 
@@ -221,15 +243,7 @@ juce::Timer
         juce::Rectangle<int> getRenderArea();
         juce::Rectangle<int> getAnalysisArea();
 
-        SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType> *leftChannelFifo;
-
-        juce::AudioBuffer<float> monoBuffer;
-
-        FFTDataGenerator<std::vector<float>> leftChannelFFTDataGenerator;
-
-        AnalyzerPathGenerator<juce::Path> pathProducer;
-
-        juce::Path leftChannelFFTPath;
+        PathProducer leftPathProducer, rightPathProducer;
 };
 
 //==============================================================================
@@ -268,6 +282,14 @@ private:
                 hiCutFreqSliderAttachment,
                 loCutSlopeSliderAttachment,
                 hiCutSlopeSliderAttachment;
+
+    juce::ToggleButton locutBypassButton, peakBypassButton, hicutBypassButton, analyzerEnabledButton;
+    
+    using ButtonAttachment = APVTS::ButtonAttachment;
+    ButtonAttachment locutBypassButtonAttachment,
+                     peakBypassButtonAttachment,
+                     hicutBypassButtonAttachment,
+                     analyzerEnabledButtonAttachment;
 
     std::vector<juce::Component*> getComps();
 
