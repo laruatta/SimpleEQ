@@ -288,7 +288,7 @@ void SimpleEQAudioProcessor::updateHiCutFilters(const ChainSettings& chainSettin
 {
     auto hiCutCoefficients = makeHiCutFilter(chainSettings, getSampleRate());
     auto& leftHiCut = leftChain.get<ChainPositions::HiCut>();
-    auto& rightHiCut = rightChain.get<ChainPositions::HiCut>();    
+    auto& rightHiCut = rightChain.get<ChainPositions::HiCut>();
 
     leftChain.setBypassed<ChainPositions::HiCut>(chainSettings.hiCutBypassed);
     rightChain.setBypassed<ChainPositions::HiCut>(chainSettings.hiCutBypassed);

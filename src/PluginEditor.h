@@ -34,7 +34,17 @@ struct FFTDataGenerator
         //normalize the fft values.
         for( int i = 0; i < numBins; ++i )
         {
-            fftData[i] /= (float) numBins;
+            auto v = fftData[i];
+//            fftData[i] /= (float) numBins;
+            if( !std::isinf(v) && !std::isnan(v) )
+            {
+                v /= float(numBins);
+            }
+            else
+            {
+                v = 0.f;
+            }
+            fftData[i] = v;
         }
         
         //convert them to decibels
@@ -102,12 +112,14 @@ struct AnalyzerPathGenerator
         {
             return juce::jmap(v,
                               negativeInfinity, 0.f,
-                              float(bottom),   top);
+                              float(bottom+10),   top);
         };
 
         auto y = map(renderData[0]);
 
-        jassert( !std::isnan(y) && !std::isinf(y) );
+//        jassert( !std::isnan(y) && !std::isinf(y) );
+        if( std::isnan(y) || std::isinf(y) )
+            y = bottom;
 
         p.startNewSubPath(0, y);
 
@@ -117,7 +129,7 @@ struct AnalyzerPathGenerator
         {
             y = map(renderData[binNum]);
 
-            jassert( !std::isnan(y) && !std::isinf(y) );
+//            jassert( !std::isnan(y) && !std::isinf(y) );
 
             if( !std::isnan(y) && !std::isinf(y) )
             {
@@ -253,7 +265,28 @@ juce::Timer
 
 //==============================================================================
 struct PowerButton : juce::ToggleButton { };
-struct AnalyzerButton : juce::ToggleButton { };
+struct AnalyzerButton : juce::ToggleButton
+{
+    void resized() override
+    {
+        auto bounds = getLocalBounds();
+        auto insetRect = bounds.reduced(4);
+
+        randomPath.clear();
+
+        juce::Random r;
+        randomPath.startNewSubPath(insetRect.getX(), 
+                                   insetRect.getY() + insetRect.getHeight() * r.nextFloat());
+        
+        for( auto x = insetRect.getX() + 1; x < insetRect.getRight(); x += 2)
+        {
+            randomPath.lineTo(x, insetRect.getY() + insetRect.getHeight() * r.nextFloat());
+        }
+    }
+
+    juce::Path randomPath;
+};
+
 class SimpleEQAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:

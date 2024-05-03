@@ -15,10 +15,11 @@ void LookAndFeel::drawRotarySlider(juce::Graphics& g,
 
     auto bounds = Rectangle<float>(x,y, width, height);
 
-    g.setColour(Colour(0u, 0u, 51u));
+	auto enabled = slider.isEnabled();
+    g.setColour(enabled ? Colour(0u, 0u, 51u) : Colours::darkgrey);
     g.fillEllipse(bounds);
 
-    g.setColour(Colour(0u, 204u, 102u));
+    g.setColour(enabled ? Colour(0u, 204u, 102u) : Colours::grey);
     g.drawEllipse(bounds, 1.f);
 
     if( auto* lrs = dynamic_cast<LabeledRotarySlider*>(&slider))
@@ -48,10 +49,10 @@ void LookAndFeel::drawRotarySlider(juce::Graphics& g,
         r.setSize(strWidth + 4, lrs->getTextHeight() + 2);
         r.setCentre(bounds.getCentre());
 
-        g.setColour(Colours::black);
+        g.setColour(enabled ? Colours::black : Colours::darkgrey);
         g.fillRect(r);
 
-        g.setColour(Colours::white);
+        g.setColour(enabled ? Colours::white : Colours::lightgrey);
         g.drawFittedText(text, r.toNearestInt(), juce::Justification::centred, 1);
     }
 }
@@ -105,19 +106,7 @@ void LookAndFeel::drawToggleButton(juce::Graphics &g,
         auto bounds = toggleButton.getLocalBounds();
         g.drawRect(bounds);
 
-        auto insetRect = bounds.reduced(4);
-
-        Path randomPath;
-        Random r;
-        randomPath.startNewSubPath(insetRect.getX(), 
-                                   insetRect.getY() + insetRect.getHeight() * r.nextFloat());
-        
-        for( auto x = insetRect.getX() + 1; x < insetRect.getRight(); x += 2)
-        {
-            randomPath.lineTo(x, insetRect.getY() + insetRect.getHeight() * r.nextFloat());
-        }
-
-        g.strokePath(randomPath, PathStrokeType(1.f));
+        g.strokePath(analyzerButton->randomPath, PathStrokeType(1.f));
     }
 }
 
