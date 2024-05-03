@@ -17,6 +17,7 @@ CPMAddPackage(
 )
 
 add_subdirectory(src)
+add_subdirectory(tracy)
 
 # CPack builds an installer around the final executable
 include(InstallRequiredSystemLibraries)
