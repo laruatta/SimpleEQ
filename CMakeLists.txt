@@ -16,8 +16,21 @@ CPMAddPackage(
     SOURCE_DIR ${LIB_DIR}/juce
 )
 
+CPMAddPackage(
+    NAME GOOGLETEST
+    GITHUB_REPOSITORY google/googletest
+    VERSION 1.14.0
+    SOURCE_DIR ${LIB_DIR}/googletest
+    OPTIONS
+        "INSTALL_GTEST OFF"
+        "gtest_force_shared_crt ON"
+)
+
 add_subdirectory(src)
+add_subdirectory(test)
 add_subdirectory(tracy)
+
+enable_testing()
 
 # CPack builds an installer around the final executable
 include(InstallRequiredSystemLibraries)
