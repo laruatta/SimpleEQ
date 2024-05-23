@@ -4,6 +4,10 @@
 #include <juce_dsp/juce_dsp.h>
 
 #include <array>
+
+int Factorial(int n);
+bool IsPrime(int n);
+
 template<typename T>
 struct Fifo
 {
