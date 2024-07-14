@@ -28,9 +28,16 @@ CPMAddPackage(
 
 add_subdirectory(src)
 add_subdirectory(test)
+#set options before add_subdirectory
+option(TRACY_ENABLE "" ON)
 add_subdirectory(tracy)
+# target_link_libraries(${PROJECT_NAME}
+#     PUBLIC Tracy::TracyClient)
 
-enable_testing()
+
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -TRACY_ENABLE=1")
+
+# enable_testing()
 
 # CPack builds an installer around the final executable
 include(InstallRequiredSystemLibraries)

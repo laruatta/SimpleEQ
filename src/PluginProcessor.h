@@ -1,9 +1,10 @@
 #pragma once
 
+#include <array>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 
-#include <array>
+#include "TracyClient.cpp"
 
 int Factorial(int n);
 bool IsPrime(int n);

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-option(TRACY_ENABLE "")
+# option(TRACY_ENABLE "TRUE")
 
 # target_link_libraries(SimpleEQ
 #     PUBLIC

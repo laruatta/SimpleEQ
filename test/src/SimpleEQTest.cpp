@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <climits>
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
 
 namespace SimpleEQTest {
     TEST(SimpleEQAudioProcessor, Foo) {
@@ -8,7 +9,10 @@ namespace SimpleEQTest {
         ASSERT_FALSE(false);
     }
 
-
+    // TEST(SliderAttachment, Set) {
+    //     juce::AudioProcessorValueTreeState::SliderAttachment testAttachment;
+    //     ASSERT_EQ();
+    // }
     // TEST(SimpleEQAudioProcessor, )
 }
 

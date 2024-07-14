@@ -123,6 +123,7 @@ bool IsPrime(int n) {
 //==============================================================================
 void SimpleEQAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    // FrameMark("main");
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     juce::dsp::ProcessSpec spec;
